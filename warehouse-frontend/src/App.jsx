@@ -178,7 +178,7 @@ useEffect(() => {
 return;
 }
   axios.get(
-  "http://localhost:8080/api/products",
+  "https://skyhavenbackend.onrender.com/api/products",
   {
     headers: {
       Authorization:
@@ -227,8 +227,8 @@ return;
 
 axios.get(
 userRole === "Admin"
-? "http://localhost:8080/api/orders"
-: `http://localhost:8080/api/orders/user/${localStorage.getItem("username")}`,
+? "https://skyhavenbackend.onrender.com/api/orders"
+: `https://skyhavenbackend.onrender.com/api/orders/user/${localStorage.getItem("username")}`,
 {
 headers:{
 Authorization:
@@ -798,7 +798,7 @@ return;
 }
 
 axios.post(
-"http://localhost:8080/api/orders",
+"https://skyhavenbackend.onrender.com/api/orders",
 {
 customerName:
 orderData.customerName,
@@ -843,7 +843,7 @@ setOrders([
 ...orders,
 response.data
 ]);axios.get(
-"http://localhost:8080/api/products",
+"https://skyhavenbackend.onrender.com/api/products",
 {
 headers:{
 Authorization:
@@ -1289,7 +1289,7 @@ darkMode
               onClick={() => {
                 if (editingId) {
                   axios.put(
-  `http://localhost:8080/api/products/${editingId}`,
+  `https://skyhavenbackend.onrender.com/api/products/${editingId}`,
   newProduct,
   {
     headers: {
@@ -1330,7 +1330,7 @@ return updated;
                     });
                 } else {
                   axios.post(
-  "http://localhost:8080/api/products",
+  "https://skyhavenbackend.onrender.com/api/products",
   newProduct,
   {
     headers: {
@@ -2131,7 +2131,7 @@ darkMode
             <button
               onClick={() => {
                 axios.delete(
-  `http://localhost:8080/api/products/${product.id}`,
+  `https://skyhavenbackend.onrender.com/api/products/${product.id}`,
   {
     headers: {
       Authorization:
@@ -2410,7 +2410,7 @@ value={order.status}
 onChange={(e)=>{
 
 axios.put(
-`http://localhost:8080/api/orders/${order.id}/status?status=${e.target.value}`,
+`https://skyhavenbackend.onrender.com/api/orders/${order.id}/status?status=${e.target.value}`,
 {},
 {
 headers:{
