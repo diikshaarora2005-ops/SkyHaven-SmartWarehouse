@@ -452,7 +452,12 @@ const getProductImage = (productName) => {
   if (name.includes("iphone") || name.includes("phone"))
     return "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400";
 
-  if (name.includes("laptop"))
+  if (
+  name.includes("laptop") ||
+  name.includes("hp") ||
+  name.includes("dell") ||
+  name.includes("lenovo")
+)
     return "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400";
 
   if (name.includes("mouse"))
