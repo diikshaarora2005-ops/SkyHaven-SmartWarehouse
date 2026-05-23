@@ -11,83 +11,11 @@ export default function Login({ onLogin }) {
 const [password, setPassword] =
   useState("");
 
+  const [loading, setLoading] =
+  useState(false);
 
-  <button
-  disabled={loading}
-  onClick={() => {
-
-    setLoading(true);
-
-    axios
-      .post(
-        "https://skyhavenbackend.onrender.com/auth/login",
-        {
-          username,
-          password,
-        }
-      )
-      .then((response) => {
-
-        const token = response.data;
-        const decoded = jwtDecode(token);
-
-        const role =
-          decoded.role || decoded.roles;
-
-        localStorage.setItem(
-          "role",
-          role
-        );
-
-        localStorage.setItem(
-          "token",
-          token
-        );
-
-        localStorage.setItem(
-          "isLoggedIn",
-          "true"
-        );
-
-        localStorage.setItem(
-          "role",
-          role
-        );
-
-        localStorage.setItem(
-          "username",
-          username
-        );
-
-        window.location.href = "/";
-      })
-      .catch(() => {
-        alert("Invalid credentials");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }}
-  style={{
-    width: "100%",
-    padding: "14px",
-    border: "none",
-    borderRadius: "14px",
-    background: loading
-      ? "#777"
-      : "hotpink",
-    color: "white",
-    fontSize: "16px",
-    cursor: loading
-      ? "not-allowed"
-      : "pointer",
-    opacity: loading ? 0.7 : 1,
-  }}
->
-  {loading
-    ? "Logging in..."
-    : "Login"}
-</button>  
+ 
+      
   return (
     <div
       style={{
