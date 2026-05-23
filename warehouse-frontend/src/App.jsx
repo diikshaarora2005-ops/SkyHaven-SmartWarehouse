@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import {
@@ -175,6 +176,37 @@ useEffect(() => {
     if(
 !localStorage.getItem("token")
 ){
+  const token =
+  localStorage.getItem("token");
+
+try {
+
+  const decoded =
+    jwtDecode(token);
+
+  const currentTime =
+    Date.now() / 1000;
+
+  if (
+    decoded.exp <
+    currentTime
+  ) {
+
+    localStorage.clear();
+
+    window.location.reload();
+
+    return;
+  }
+
+} catch {
+
+  localStorage.clear();
+
+  window.location.reload();
+
+  return;
+}
 return;
 }
   axios.get(
