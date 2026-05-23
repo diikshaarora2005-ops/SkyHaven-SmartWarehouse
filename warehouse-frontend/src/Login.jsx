@@ -145,7 +145,7 @@ onChange={(e) =>
           username
         );
 
-        window.location.href = "/";
+        onLogin();
       })
       .catch(() => {
         alert("Invalid credentials");
