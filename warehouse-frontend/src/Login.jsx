@@ -146,6 +146,7 @@ onChange={(e) =>
         );
 
         onLogin();
+        window.location.href = "/";
       })
       .catch(() => {
         alert("Invalid credentials");
