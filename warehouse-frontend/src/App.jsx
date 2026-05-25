@@ -173,82 +173,88 @@ const scrollToSection = (ref) => {
 };
 
 useEffect(() => {
-    if(
-!localStorage.getItem("token")
-){
-  const token =
-  localStorage.getItem("token");
 
-try {
+  const token = localStorage.getItem("token");
 
-  const decoded =
-    jwtDecode(token);
+  if (!token) {
+    setLoading(false);
+    return;
+  }
 
-  const currentTime =
-    Date.now() / 1000;
+  try {
 
-  if (
-    decoded.exp <
-    currentTime
-  ) {
+    const decoded = jwtDecode(token);
+
+    const currentTime = Date.now() / 1000;
+
+    if (decoded.exp < currentTime) {
+
+      alert("Session expired. Please login again.");
+
+      localStorage.clear();
+
+      setIsLoggedIn(false);
+
+      setLoading(false);
+
+      return;
+    }
+
+  } catch (error) {
 
     localStorage.clear();
 
-    window.location.reload();
+    setIsLoggedIn(false);
+
+    setLoading(false);
 
     return;
   }
 
-} catch {
-
-  localStorage.clear();
-
-  window.location.reload();
-
-  return;
-}
-return;
-}
   axios.get(
-  "https://skyhavenbackend.onrender.com/api/products",
-  {
-    headers: {
-      Authorization:
-        "Bearer " +
-        localStorage.getItem("token"),
-    },
-  }
-)
-    .then((response) => {
-      console.log("API DATA:", response.data);
+    "https://skyhavenbackend.onrender.com/api/products",
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  )
 
-      setProducts(
-  Array.isArray(response.data)
-    ? response.data
-    : response.data.data || []
-);
+  .then((response) => {
 
-      setLoading(false);
-    })
-    .catch((error) => {
-    console.error("Error fetching products:", error);
+    setProducts(
+      Array.isArray(response.data)
+        ? response.data
+        : response.data.data || []
+    );
+
+    setLoading(false);
+
+  })
+
+  .catch((error) => {
+
+    console.error(error);
 
     if (
-        error.response &&
-        (error.response.status === 401 ||
-         error.response.status === 403)
+      error.response &&
+      (
+        error.response.status === 401 ||
+        error.response.status === 403
+      )
     ) {
-        alert("Session expired. Please login again.");
 
-        localStorage.removeItem("token");
-        localStorage.removeItem("isLoggedIn");
-        localStorage.removeItem("role");
+      alert("Session expired. Please login again.");
 
-        window.location.href = "/";
+      localStorage.clear();
+
+      setIsLoggedIn(false);
     }
 
     setLoading(false);
-});
+
+  });
+
 }, []);
 useEffect(() => {
     if(
