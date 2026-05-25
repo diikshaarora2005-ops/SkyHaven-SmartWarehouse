@@ -264,7 +264,7 @@ return;
 }
 
 axios.get(
-userRole === "Admin"
+(userRole === "Admin" || userRole === "admin")
 ? "https://skyhavenbackend.onrender.com/api/orders"
 : `https://skyhavenbackend.onrender.com/api/orders/user/${localStorage.getItem("username")}`,
 {
@@ -1213,7 +1213,7 @@ darkMode
 }
 </button>
 
-    {userRole !== "User" && (
+    {(userRole === "Admin" || userRole === "admin") && (
     <button
       onClick={() => {
         setEditingId(null);
@@ -2148,7 +2148,7 @@ darkMode
             >
               Quantity: {product.quantity}
             </p>
-            {userRole !== "User" && (
+            {(userRole === "Admin" || userRole === "admin") && (
             <button
               onClick={() => {
                 setEditingId(product.id);
@@ -2188,7 +2188,7 @@ darkMode
               Edit Product
             </button>
             )}
-            {userRole === "Admin" && (
+            {(userRole === "Admin" || userRole === "admin") && (
             <button
               onClick={() => {
                 axios.delete(
@@ -2464,7 +2464,7 @@ order.status.includes("Pending")
 >
 {order.status}
 </span>
-{userRole === "Admin" && (
+{(userRole === "Admin" || userRole === "admin") && (
 <select
 value={order.status}
 
