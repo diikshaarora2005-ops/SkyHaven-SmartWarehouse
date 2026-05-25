@@ -1408,12 +1408,12 @@ return updated;
                       ]);
 
                       setNewProduct({
-  productName: product.productName,
-  skuCode: product.skuCode,
-  category: product.category,
-  price: product.price,
-  quantity: product.quantity,
-  imageUrl: product.imageUrl || "",
+  productName: "",
+  skuCode: "",
+  category: "",
+  price: "",
+  quantity: "",
+  imageUrl: "",
 });
 
                       setShowForm(false);
