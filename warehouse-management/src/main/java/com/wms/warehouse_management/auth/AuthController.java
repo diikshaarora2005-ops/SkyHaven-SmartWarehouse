@@ -51,6 +51,7 @@ public class AuthController {
         user.setPassword(
         	    passwordEncoder.encode(user.getPassword())
         	);
+            user.setRole("Admin");
         userRepository.save(user);
 
         return "User registered successfully";
