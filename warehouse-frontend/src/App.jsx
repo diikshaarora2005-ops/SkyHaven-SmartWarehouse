@@ -591,6 +591,24 @@ const exportExcel = () => {
   );
 };
 if (!isLoggedIn) {
+  if (loading) {
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#0f0f0f",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        color: "white",
+        fontSize: "24px",
+        fontFamily: "Poppins, sans-serif",
+      }}
+    >
+      Loading Dashboard...
+    </div>
+  );
+}
   return (
     <Login
   onLogin={(role) => {
