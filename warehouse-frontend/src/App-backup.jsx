@@ -36,7 +36,7 @@ quantity: "",
 
 useEffect(() => {
   axios
-    .get("https://skyhavenbackend.onrender.com/api/products")
+    .get("http://localhost:8080/api/products")
     .then((response) => {
       console.log("API DATA:", response.data);
 
@@ -353,7 +353,7 @@ position: "relative",
                 if (editingId) {
                   axios
                     .put(
-                      `https://skyhavenbackend.onrender.com/api/products/${editingId}`,
+                      `http://localhost:8080/api/products/${editingId}`,
                       newProduct
                     )
                     .then((response) => {
@@ -375,7 +375,7 @@ position: "relative",
                 } else {
                   axios
                     .post(
-                      "https://skyhavenbackend.onrender.com/api/products",
+                      "http://localhost:8080/api/products",
                       newProduct
                     )
                     .then((response) => {
@@ -715,7 +715,7 @@ position: "relative",
               onClick={() => {
                 axios
                   .delete(
-                    `https://skyhavenbackend.onrender.com/api/products/${product.id}`
+                    `http://localhost:8080/api/products/${product.id}`
                   )
                   .then(() => {
                     setProducts(

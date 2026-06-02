@@ -158,9 +158,11 @@ const [isLoggedIn, setIsLoggedIn] =
       "true"
   );
   const [userRole, setUserRole] =
-  useState(
-    localStorage.getItem("role") || ""
-  );
+useState(
+localStorage.getItem("role") || ""
+);
+  console.log("ROLE =", userRole);
+  console.log("LOCAL STORAGE ROLE =", localStorage.getItem("role"));
   const dashboardRef = useRef(null);
 const productsRef = useRef(null);
 const analyticsRef = useRef(null);
@@ -175,6 +177,7 @@ const scrollToSection = (ref) => {
 useEffect(() => {
 
   const token = localStorage.getItem("token");
+  console.log("ROLE FROM STORAGE =", localStorage.getItem("role"));
 
   if (!token) {
     setLoading(false);
@@ -184,8 +187,17 @@ useEffect(() => {
   try {
 
     const decoded = jwtDecode(token);
+    console.log("TOKEN =", token);
+console.log("DECODED =", decoded);
 
     const currentTime = Date.now() / 1000;
+    const savedRole =
+localStorage.getItem("role");
+
+if (savedRole) {
+  setUserRole(savedRole);
+}
+console.log("savedRole =", savedRole);
 
     if (decoded.exp < currentTime) {
 
@@ -201,6 +213,7 @@ useEffect(() => {
     }
 
   } catch (error) {
+    console.log("JWT ERROR =", error);
 
     localStorage.clear();
 
@@ -212,7 +225,7 @@ useEffect(() => {
   }
 
   axios.get(
-    "https://skyhavenbackend.onrender.com/api/products",
+    "http://localhost:8080/api/products",
     {
       headers: {
         Authorization: "Bearer " + token,
@@ -264,9 +277,9 @@ return;
 }
 
 axios.get(
-(userRole === "Admin" || userRole === "admin")
-? "https://skyhavenbackend.onrender.com/api/orders"
-: `https://skyhavenbackend.onrender.com/api/orders/user/${localStorage.getItem("username")}`,
+(userRole?.toLowerCase() === "admin")
+? "http://localhost:8080/api/orders"
+: `http://localhost:8080/api/orders/user/${localStorage.getItem("username")}`,
 {
 headers:{
 Authorization:
@@ -859,7 +872,7 @@ return;
 }
 
 axios.post(
-"https://skyhavenbackend.onrender.com/api/orders",
+"http://localhost:8080/api/orders",
 {
 customerName:
 orderData.customerName,
@@ -904,7 +917,7 @@ setOrders([
 ...orders,
 response.data
 ]);axios.get(
-"https://skyhavenbackend.onrender.com/api/products",
+"http://localhost:8080/api/products",
 {
 headers:{
 Authorization:
@@ -1146,6 +1159,7 @@ darkMode
 >
   Logout
 </button>
+{userRole?.toLowerCase() === "admin" && (
 <button
   onClick={exportPDF}
   style={{
@@ -1165,6 +1179,9 @@ window.innerWidth < 768
 >
   📄 Export PDF
 </button>
+)}
+
+{userRole?.toLowerCase() === "admin" && (
 <button
   onClick={exportExcel}
   style={{
@@ -1184,6 +1201,7 @@ window.innerWidth < 768
 >
   📊 Export Excel
 </button>
+)}
 <button
 onClick={() =>
 setDarkMode(!darkMode)
@@ -1213,7 +1231,8 @@ darkMode
 }
 </button>
 
-    {(userRole === "Admin" || userRole === "admin") && (
+
+    {(userRole?.toLowerCase() === "admin") && (
     <button
       onClick={() => {
         setEditingId(null);
@@ -1350,7 +1369,7 @@ darkMode
               onClick={() => {
                 if (editingId) {
                   axios.put(
-  `https://skyhavenbackend.onrender.com/api/products/${editingId}`,
+  `http://localhost:8080/api/products/${editingId}`,
   newProduct,
   {
     headers: {
@@ -1391,7 +1410,7 @@ return updated;
                     });
                 } else {
                   axios.post(
-  "https://skyhavenbackend.onrender.com/api/products",
+  "http://localhost:8080/api/products",
   newProduct,
   {
     headers: {
@@ -1618,6 +1637,7 @@ darkMode
       Rs. {cheapestProduct?.price}
     </p>
   </div>
+  {userRole?.toLowerCase() === "admin" && (
 
   <div
     style={{
@@ -1638,10 +1658,17 @@ darkMode
 : "#111827"
 }}
 >📊 Average Price</h3>
-    <h2>
-      Rs. {averagePrice}
-    </h2>
+    <h2
+  style={{
+    color: darkMode ? "white" : "black",
+    fontWeight: "normal"
+  }}
+>
+  Rs. {averagePrice}
+</h2>
   </div>
+  )}
+  {userRole?.toLowerCase() === "admin" && (
   <div
 style={{
 background:
@@ -1662,11 +1689,19 @@ darkMode
 }}
 >💰 Total Revenue</h3>
 
-<h2>
-Rs. {totalRevenue}
+<h2
+  style={{
+    color: darkMode ? "white" : "black",
+    fontWeight: "normal"
+  }}
+>
+  Rs. {totalRevenue}
 </h2>
 </div>
+)}
 </div>
+{userRole?.toLowerCase() === "admin" && (
+
 <div
 style={{
 background:
@@ -1705,6 +1740,8 @@ orderCounts[mostOrderedProduct] || 0
 Orders
 </p>
 </div>
+)}
+{userRole?.toLowerCase() === "admin" && (
      <div
   style={{
     background: "rgba(255,80,80,0.08)",
@@ -1741,6 +1778,7 @@ darkMode
     {lowStockCount}
   </h1>
 </div>
+)}
     <div
       style={{
         marginBottom: "30px",
@@ -1902,6 +1940,7 @@ window.innerWidth < 768
     </ResponsiveContainer>
   </div>
 </div>
+{userRole?.toLowerCase() === "admin" && (
 <div
 style={{
 background:
@@ -1983,6 +2022,7 @@ strokeWidth={3}
 </div>
 
 </div>
+)}
     {loading ? (
       <h2
         style={{
@@ -2148,7 +2188,7 @@ darkMode
             >
               Quantity: {product.quantity}
             </p>
-            {(userRole === "Admin" || userRole === "admin") && (
+            {(userRole?.toLowerCase() === "admin") && (
             <button
               onClick={() => {
                 setEditingId(product.id);
@@ -2188,11 +2228,11 @@ darkMode
               Edit Product
             </button>
             )}
-            {(userRole === "Admin" || userRole === "admin") && (
+            {(userRole?.toLowerCase() === "admin")&& (
             <button
               onClick={() => {
                 axios.delete(
-  `https://skyhavenbackend.onrender.com/api/products/${product.id}`,
+  `http://localhost:8080/api/products/${product.id}`,
   {
     headers: {
       Authorization:
@@ -2255,7 +2295,7 @@ darkMode
               
             </button>
             )}
-            {userRole === "User" && (
+            {true &&  (
 <button
 onClick={() => {
 
@@ -2300,6 +2340,8 @@ window.innerWidth < 768
     border: "1px solid rgba(255,255,255,0.08)",
   }}
 >
+  {userRole?.toLowerCase() === "admin" && (
+  <>
   <h2
     style={{
         display:
@@ -2315,39 +2357,34 @@ window.innerWidth < 768
     📝 Activity Logs
   </h2>
 
+ 
   {activityLogs.length === 0 ? (
-    <p style={{ color: "#aaa" }}>
-      No activity yet
+  <p style={{ color: "#aaa" }}>
+    No activity yet
+  </p>
+) : (
+  activityLogs.map((log, index) => (
+    <p
+      key={index}
+      style={{
+        color: darkMode ? "#ddd" : "#374151",
+        marginBottom: "10px",
+      }}
+    >
+      {log}
     </p>
-  ) : (
-    activityLogs.map((log, index) => (
-      <p
-        key={index}
-        style={{
-          color:
-darkMode
-? "#ddd"
-: "#374151",
-          marginBottom: "10px",
-        }}
-      >
-        {
-log.includes("Added")
-? "🟢"
-: log.includes("Edited")
-? "🟡"
-: log.includes("Deleted")
-? "🔴"
-: "📦"
-}
+  ))
+)}
+</>
+)}
 
-{" "}
+  
 
-{log}
-      </p>
-    ))
-  )}
+
+ 
 </div>
+
+
 <div
 style={{
 marginTop:"40px",
@@ -2464,14 +2501,14 @@ order.status.includes("Pending")
 >
 {order.status}
 </span>
-{(userRole === "Admin" || userRole === "admin") && (
+{(userRole?.toLowerCase() === "admin") && (
 <select
 value={order.status}
 
 onChange={(e)=>{
 
 axios.put(
-`https://skyhavenbackend.onrender.com/api/orders/${order.id}/status?status=${e.target.value}`,
+`http://localhost:8080/api/orders/${order.id}/status?status=${e.target.value}`,
 {},
 {
 headers:{

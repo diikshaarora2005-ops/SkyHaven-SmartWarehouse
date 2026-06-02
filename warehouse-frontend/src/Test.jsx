@@ -8,7 +8,7 @@ function Test() {
   useEffect(() => {
 
     axios
-      .get("https://skyhavenbackend.onrender.com/api/products")
+      .get("http://localhost:8080/api/products")
       .then((response) => {
 
         console.log(response.data);
