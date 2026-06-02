@@ -14,30 +14,34 @@ public class AuthController {
 
     @Autowired
     private JwtUtil jwtUtil;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("/login")
     public String login(@RequestBody AuthRequest authRequest) {
 
-    	Optional<User> userOptional =
-    	        userRepository.findByUsername(authRequest.getUsername());
+        Optional<User> userOptional =
+                userRepository.findByUsername(authRequest.getUsername());
 
-    	if (userOptional.isPresent()) {
+        if (userOptional.isPresent()) {
 
-    	    User user = userOptional.get();
+            User user = userOptional.get();
 
-    	    if (passwordEncoder.matches(
-    	            authRequest.getPassword(),
-    	            user.getPassword())) {
+            if (passwordEncoder.matches(
+                    authRequest.getPassword(),
+                    user.getPassword())) {
 
-    	    	return jwtUtil.generateToken(
-    	    	        user.getUsername(),
-    	    	        user.getRole());
-    	    }
-    	}
+                return jwtUtil.generateToken(
+                        user.getUsername(),
+                        user.getRole());
+            }
+        }
 
-    	return "Invalid Username or Password";
+        return "Invalid Username or Password";
     }
 
     @PostMapping("/register")
@@ -47,16 +51,15 @@ public class AuthController {
 
             return "Username already exists";
         }
-        
+
         user.setPassword(
-        	    passwordEncoder.encode(user.getPassword())
-        	);
-            user.setRole("Admin");
+                passwordEncoder.encode(user.getPassword())
+        );
+
+        user.setRole("User");
+
         userRepository.save(user);
 
         return "User registered successfully";
     }
-
-    @Autowired
-    private UserRepository userRepository;
 }
